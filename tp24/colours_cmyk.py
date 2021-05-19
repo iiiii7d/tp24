@@ -28,9 +28,14 @@ class cmyk(colour.Colour):
             yield i
 
     def rgb(self):
-        r = 255 * (100-self.c) * (100-self.k)
-        g = 255 * (100-self.m) * (100-self.k)
-        b = 255 * (100-self.y) * (100-self.k)
+        c = self.c/100
+        m = self.m/100
+        y = self.y/100
+        k = self.k/100
+
+        r = 255 * (1-c) * (1-k)
+        g = 255 * (1-m) * (1-k)
+        b = 255 * (1-y) * (1-k)
 
         r = round(r)
         g = round(g)
@@ -42,10 +47,10 @@ class cmyk(colour.Colour):
             return col_rgb.rgb(r, g, b)
 
     def hsl(self):
-        pass
+        return self.rgb().hsl()
 
     def hsv(self):
-        pass
+        return self.rgb().hsv()
 
 class cmyka(cmyk, colour.ColourAlpha):
     def __init__(self, *v):

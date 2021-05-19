@@ -4,6 +4,7 @@ import tp24.internal as internal
 import tp24.errors as errors
 import tp24.tools as tools
 
+
 class Colour:
     def __add__(self, other):
         sv, ov = internal.tuplify(self, other)
@@ -46,8 +47,37 @@ class Colour:
         return r
 
     @classmethod
-    def from_hex(cls, hexv):
-        pass
+    def from_hex(cls, hexc: str):
+        c = re.search(r"#(.+)", hexc)
+        if not c or not len(c.group(1)) in [1, 3, 4, 6, 8]:
+            raise ValueError(f"Hex {hexc} not a valid hex")
+
+        if len(c.group(1)) == 1:
+            c = c.group(1)*6
+        elif len(c.group(1)) in [3, 4]:
+            c = ''.join([char*2 for char in c.group(1)])
+        else:
+            c = c.group(1)
+
+        channels = tuple(c[i:i+2] for i in range(0, len(c), 2))
+        channels = tuple(int('0x'+i, 16) for i in channels)
+
+        import tp24.colours_rgb as col_rgb
+
+        if issubclass(cls, ColourAlpha):
+            channels = list(channels)
+            channels[3] *= 100/255
+            channels[3] = round(channels[3])
+            channels = tuple(channels)
+            colour_rgb = col_rgb.rgba(*channels)
+        else:
+            colour_rgb = col_rgb.rgb(*channels)
+        
+        if not cls.__name__.startswith("rgb"):
+            classname = cls.__name__[:-1] if issubclass(cls, ColourAlpha) else cls.__name__
+            return getattr(colour_rgb, classname)()
+        else:
+            return colour_rgb
 
     def invert(self):
         if type(self).__name__.startswith("rgb"): m = (255, 255, 255)

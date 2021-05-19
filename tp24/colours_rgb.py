@@ -81,19 +81,19 @@ class rgb(colour.Colour):
 
 
     def cmyk(self):
-        r = self.r/255*100
-        g = self.g/255*100
-        b = self.b/255*100
+        r = self.r/255
+        g = self.g/255
+        b = self.b/255
         
-        k = 100-max(r, g, b)
-        c = (100-r-k)/(100-k)
-        m = (100-g-k)/(100-k)
-        y = (100-b-k)/(100-k)
+        k = 1-max(r, g, b)
+        c = (1-r-k)/(1-k)
+        m = (1-g-k)/(1-k)
+        y = (1-b-k)/(1-k)
 
-        c = round(c)
-        m = round(m)
-        y = round(y)
-        k = round(k)
+        c = round(c*100)
+        m = round(m*100)
+        y = round(y*100)
+        k = round(k*100)
 
         if issubclass(type(self), colour.ColourAlpha):
             return col_cmyk.cmyka(c, m, y, k, self.a)

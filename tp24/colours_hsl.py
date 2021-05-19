@@ -1,5 +1,7 @@
 import tp24.colour as colour
 import tp24.errors as errors
+import tp24.colours_rgb as col_rgb
+import tp24.colours_hsv as col_hsv
 
 class hsl(colour.Colour):
     h = None
@@ -23,13 +25,48 @@ class hsl(colour.Colour):
             yield i
 
     def rgb(self):
-        pass
+        h = self.h if self.h != 360 else 0
+        s = self.s/100
+        l = self.l/100
+        c = (1 - abs(2*l-1)) * s
+        x = c * (1 - abs((h/60)%2 - 1))
+        m = l - c/2
+
+        if 0 <= h < 60:      r, g, b = c, x, 0
+        elif 60 <= h < 120:  r, g, b = x, c, 0
+        elif 120 <= h < 180: r, g, b = 0, c, x
+        elif 180 <= h < 240: r, g, b = 0, x, c
+        elif 240 <= h < 300: r, g, b = x, 0, c
+        elif 300 <= h < 360: r, g, b = c, 0, x
+
+        r = round((r+m)*255)
+        g = round((g+m)*255)
+        b = round((b+m)*255)
+
+        if issubclass(type(self), colour.ColourAlpha):
+            return col_rgb.rgba(r, g, b, self.a)
+        else:
+            return col_rgb.rgb(r, g, b)
 
     def hsv(self):
-        pass
+        h = self.h
+        s = self.s/100
+        l = self.l/100
+
+        v = l + s*min(l, 1-l)
+        if v == 0: s == 0
+        else: s == 2-(2*l)/v
+
+        s = round(s*100)
+        v = round(v*100)
+
+        if issubclass(type(self), colour.ColourAlpha):
+            return col_hsv.hsva(h, s, v, self.a)
+        else:
+            return col_hsv.hsv(h, s, v)
 
     def cmyk(self):
-        pass
+        return self.rgb().cmyk()
 
 class hsla(hsl, colour.ColourAlpha):
     def __init__(self, *v):
