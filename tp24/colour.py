@@ -1,5 +1,6 @@
 import importlib
 import re
+import json
 import tp24.internal as internal
 import tp24.errors as errors
 import tp24.tools as tools
@@ -54,6 +55,15 @@ class Colour:
         return r
 
     @classmethod
+    def from_web(cls, web: str):
+        with open("tp24/web.json", "r") as f:
+            data = json.load(f)
+            f.close()
+        if not web in data.keys():
+            raise ValueError(f"{web} is not a valid web colour")
+        return cls.from_hex("#"+data[web])
+
+    @classmethod
     def from_hex(cls, hexc: str):
         c = re.search(r"#(.+)", hexc)
         if not c or not len(c.group(1)) in [1, 3, 4, 6, 8]:
@@ -86,7 +96,7 @@ class Colour:
         else:
             return colour_rgb
 
-    def complementary(self):
+    def inverted(self):
         if internal.unalpha(type(self).__name__, self) != "rgb":
             c = self.rgb()
         else:
@@ -102,67 +112,13 @@ class Colour:
         else:
             return type(self)(*new)
 
-    def triadic(self):
-        if internal.unalpha(type(self).__name__, self) != "hsl":
-            c = self.hsl()
-        else:
-            c = self
-
-        import tp24.colours_hsl as col_hsl
-        if issubclass(type(c), ColourAlpha):
-            t1 = col_hsl.hsla(*tuple(c))
-            t2 = col_hsl.hsla(*tuple(c))
-        else:
-            t1 = col_hsl.hsl(*tuple(c))
-            t2 = col_hsl.hsl(*tuple(c))
-
-        t1.h += 120
-        t2.h -= 120
-
-        if t1.h >= 360: t1.h -= 360
-        if t2.h < 0: t2.h += 360
-
-        if internal.unalpha(type(self).__name__, self) != "hsl":
-            return getattr(t1, internal.unalpha(type(self).__name__, self))(), \
-                   getattr(t2, internal.unalpha(type(self).__name__, self))()
-        else:
-            return t1, t2
-
-    def tetradic(self):
-        if internal.unalpha(type(self).__name__, self) != "hsl":
-            c = self.hsl()
-        else:
-            c = self
-
-        import tp24.colours_hsl as col_hsl
-        if issubclass(type(c), ColourAlpha):
-            t1 = col_hsl.hsla(*tuple(c))
-            t2 = col_hsl.hsla(*tuple(c))
-            t3 = col_hsl.hsla(*tuple(c))
-        else:
-            t1 = col_hsl.hsl(*tuple(c))
-            t2 = col_hsl.hsl(*tuple(c))
-            t3 = col_hsl.hsl(*tuple(c))
-
-        t1.h += 90
-        t2.h += 180
-        t3.h -= 90
-
-
-        if t1.h >= 360: t1.h -= 360
-        if t2.h >= 360: t2.h -= 360
-        if t3.h < 0: t3.h += 360
-
-        if internal.unalpha(type(self).__name__, self) != "hsl":
-            return getattr(t1, internal.unalpha(type(self).__name__, self))(), \
-                   getattr(t2, internal.unalpha(type(self).__name__, self))(), \
-                   getattr(t3, internal.unalpha(type(self).__name__, self))()
-        else:
-            return t1, t2, t3
-
-    def analogous(self, degree=30):
+    def wheel(self, colours: int, degree: int=None):
+        if degree == None:
+            degree = 360/(colours+1)
         if degree < 0 or degree > 180:
             raise errors.RangeError(f"Value of degree is {degree} but is not in range of 0 <= d <= 180")
+        elif colours < 0:
+            raise errors.RangeError(f"Number of colours is {colours} but is not in range of c > 0")
 
         if internal.unalpha(type(self).__name__, self) != "hsl":
             c = self.hsl()
@@ -170,24 +126,39 @@ class Colour:
             c = self
 
         import tp24.colours_hsl as col_hsl
-        if issubclass(type(c), ColourAlpha):
-            t1 = col_hsl.hsla(*tuple(c))
-            t2 = col_hsl.hsla(*tuple(c))
-        else:
-            t1 = col_hsl.hsl(*tuple(c))
-            t2 = col_hsl.hsl(*tuple(c))
+        cols = []
+        for i in range(colours):
+            if issubclass(type(c), ColourAlpha):
+                cols.append(col_hsl.hsla(*tuple(c)))
+            else:
+                cols.append(col_hsl.hsl(*tuple(c)))
 
-        t1.h += degree
-        t2.h -= degree
-
-        if t1.h >= 360: t1.h -= 360
-        if t2.h < 0: t2.h += 360
-
+        for count, i in enumerate(cols):
+            direction = count % 2
+            if direction == 0: direction = -1
+            multiplier = count // 2 + 1
+            i.h += direction*degree*multiplier
+            while i.h >= 360: i.h -= 360
+            while i.h < 0: i.h += 360
+        
         if internal.unalpha(type(self).__name__, self) != "hsl":
-            return getattr(t1, internal.unalpha(type(self).__name__, self))(), \
-                   getattr(t2, internal.unalpha(type(self).__name__, self))()
+            #return getattr(t1, internal.unalpha(type(self).__name__, self))(), \
+            #       getattr(t2, internal.unalpha(type(self).__name__, self))()
+            return tuple(getattr(i, internal.unalpha(type(self).__name__, self))() for i in cols)
         else:
-            return t1, t2
+            return tuple(cols)
+
+    def complementary(self):
+        return self.wheel(1)[0]
+
+    def triadic(self):
+        return self.wheel(2)
+
+    def tetradic(self):
+        return self.wheel(3)
+
+    def analogous(self, degree=30):
+        return self.wheel(degree)
 
     def compound(self, degree=30):
         return self.complementary().analogous(degree)
