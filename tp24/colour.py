@@ -7,9 +7,7 @@ import tp24.tools as tools
 
 class Colour:
     def __add__(self, other):
-        if internal.unalpha(type(self).__name__, self) != internal.unalpha(type(other).__name__, other):
-            funcname = internal.unalpha(type(self).__name__, self)
-            other = getattr(other, funcname)()
+        other = internal.samemodel(self, other)
         sv, ov = internal.tuplify(self, other)
         new = tuple(a+b for a, b in zip(sv, ov))
         oc = internal.getclass(self, other)
@@ -17,6 +15,7 @@ class Colour:
         return oc(*new)
 
     def __sub__(self, other):
+        other = internal.samemodel(self, other)
         sv, ov = internal.tuplify(self, other)
         new = tuple(a-b for a, b in zip(sv, ov))
         oc = internal.getclass(self, other)

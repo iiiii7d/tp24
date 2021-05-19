@@ -68,7 +68,7 @@ class rgb(colour.Colour):
         
         l = (cmax+cmin)/2
         
-        if cmax == 0: s = 0
+        if d == 0: s = 0
         else: s = d / (1-abs(2*l-1))
         
         h = round(h)

@@ -1,4 +1,4 @@
-from tp24.tools import *
+import tp24.tools
 from tp24.colours_rgb import *
 from tp24.colours_hsl import *
 from tp24.colours_hsv import *

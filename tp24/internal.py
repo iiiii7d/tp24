@@ -20,3 +20,10 @@ def getclass(cls, cls2):
 
 def unalpha(i, cls):
     return i[:-1] if issubclass(type(cls), colour.ColourAlpha) else i
+
+def samemodel(a, b):
+    if unalpha(type(a).__name__, a) != unalpha(type(b).__name__, b):
+        funcname = unalpha(type(a).__name__, a)
+        return getattr(b, funcname)()
+    else:
+        return b
