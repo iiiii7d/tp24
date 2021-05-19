@@ -87,7 +87,7 @@ class Colour:
         else:
             return colour_rgb
 
-    def inverted(self):
+    def complementary(self):
         old = internal.unalpha(tuple(self), self)
         new = tuple(a-b for a, b in zip(self.RANGE, old))
         if issubclass(type(self), ColourAlpha): new = tuple(list(new)+[self.a])

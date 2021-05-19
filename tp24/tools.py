@@ -11,7 +11,7 @@ def similarity(a: colour.Colour, b: colour.Colour):
     b = internal.samemodel(a, b)
     at = internal.unalpha(tuple(a), a)
     bt = internal.unalpha(tuple(b), b)
-    ait = internal.unalpha(tuple(a.inverted()), a)
+    ait = internal.unalpha(tuple(a.complementary()), a)
 
     if at == bt: return 100.0
     elif ait == bt: return 0.0
