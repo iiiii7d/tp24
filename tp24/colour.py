@@ -4,7 +4,6 @@ import tp24.internal as internal
 import tp24.errors as errors
 import tp24.tools as tools
 
-
 class Colour:
     def __add__(self, other):
         other = internal.samemodel(self, other)
@@ -88,12 +87,110 @@ class Colour:
             return colour_rgb
 
     def complementary(self):
-        old = internal.unalpha(tuple(self), self)
-        new = tuple(a-b for a, b in zip(self.RANGE, old))
-        if issubclass(type(self), ColourAlpha): new = tuple(list(new)+[self.a])
+        if internal.unalpha(type(self).__name__, self) != "rgb":
+            c = self.rgb()
+        else:
+            c = self
+        
+        old = internal.unalpha(tuple(c), c)
+        new = tuple(a-b for a, b in zip(c.RANGE, old))
+        if issubclass(type(c), ColourAlpha): new = tuple(list(new)+[c.a])
 
-        return type(self)(*new)
-            
+        if internal.unalpha(type(self).__name__, self) != "rgb":
+            import tp24.colours_rgb as col_rgb
+            return getattr(getattr(col_rgb, internal.unalpha(type(c).__name__, c))(*new), internal.unalpha(type(self).__name__, self))()
+        else:
+            return type(self)(*new)
+
+    def triadic(self):
+        if internal.unalpha(type(self).__name__, self) != "hsl":
+            c = self.hsl()
+        else:
+            c = self
+
+        import tp24.colours_hsl as col_hsl
+        if issubclass(type(c), ColourAlpha):
+            t1 = col_hsl.hsla(*tuple(c))
+            t2 = col_hsl.hsla(*tuple(c))
+        else:
+            t1 = col_hsl.hsl(*tuple(c))
+            t2 = col_hsl.hsl(*tuple(c))
+
+        t1.h += 120
+        t2.h -= 120
+
+        if t1.h >= 360: t1.h -= 360
+        if t2.h < 0: t2.h += 360
+
+        if internal.unalpha(type(self).__name__, self) != "hsl":
+            return getattr(t1, internal.unalpha(type(self).__name__, self))(), \
+                   getattr(t2, internal.unalpha(type(self).__name__, self))()
+        else:
+            return t1, t2
+
+    def tetradic(self):
+        if internal.unalpha(type(self).__name__, self) != "hsl":
+            c = self.hsl()
+        else:
+            c = self
+
+        import tp24.colours_hsl as col_hsl
+        if issubclass(type(c), ColourAlpha):
+            t1 = col_hsl.hsla(*tuple(c))
+            t2 = col_hsl.hsla(*tuple(c))
+            t3 = col_hsl.hsla(*tuple(c))
+        else:
+            t1 = col_hsl.hsl(*tuple(c))
+            t2 = col_hsl.hsl(*tuple(c))
+            t3 = col_hsl.hsl(*tuple(c))
+
+        t1.h += 90
+        t2.h += 180
+        t3.h -= 90
+
+
+        if t1.h >= 360: t1.h -= 360
+        if t2.h >= 360: t2.h -= 360
+        if t3.h < 0: t3.h += 360
+
+        if internal.unalpha(type(self).__name__, self) != "hsl":
+            return getattr(t1, internal.unalpha(type(self).__name__, self))(), \
+                   getattr(t2, internal.unalpha(type(self).__name__, self))(), \
+                   getattr(t3, internal.unalpha(type(self).__name__, self))()
+        else:
+            return t1, t2, t3
+
+    def analogous(self, degree=30):
+        if degree < 0 or degree > 180:
+            raise errors.RangeError(f"Value of degree is {degree} but is not in range of 0 <= d <= 180")
+
+        if internal.unalpha(type(self).__name__, self) != "hsl":
+            c = self.hsl()
+        else:
+            c = self
+
+        import tp24.colours_hsl as col_hsl
+        if issubclass(type(c), ColourAlpha):
+            t1 = col_hsl.hsla(*tuple(c))
+            t2 = col_hsl.hsla(*tuple(c))
+        else:
+            t1 = col_hsl.hsl(*tuple(c))
+            t2 = col_hsl.hsl(*tuple(c))
+
+        t1.h += degree
+        t2.h -= degree
+
+        if t1.h >= 360: t1.h -= 360
+        if t2.h < 0: t2.h += 360
+
+        if internal.unalpha(type(self).__name__, self) != "hsl":
+            return getattr(t1, internal.unalpha(type(self).__name__, self))(), \
+                   getattr(t2, internal.unalpha(type(self).__name__, self))()
+        else:
+            return t1, t2
+
+    def compound(self, degree=30):
+        return self.complementary().analogous(degree)
 
     def add_alpha(self, va: int):
         if issubclass(type(self), ColourAlpha):

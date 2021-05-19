@@ -39,7 +39,6 @@ class hsl(colour.Colour):
         elif 180 <= h < 240: r, g, b = 0, x, c
         elif 240 <= h < 300: r, g, b = x, 0, c
         elif 300 <= h < 360: r, g, b = c, 0, x
-
         r = round((r+m)*255)
         g = round((g+m)*255)
         b = round((b+m)*255)
