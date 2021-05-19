@@ -3,19 +3,20 @@ import tp24.colours_rgb as col_rgb
 import tp24.errors as errors
 
 class cmyk(colour.Colour):
+    RANGE = (100, 100, 100, 100)
     c = None
     m = None
     y = None
     k = None
 
     def __init__(self, vc: int, vm: int, vy: int, vk: int):
-        if not 0 <= vc <= 100:
+        if not 0 <= vc <= self.RANGE[0]:
             raise errors.RangeError(f"Value of C channel is {vc} but is not in range of 0 <= C <= 100")
-        elif not 0 <= vm <= 100:
+        elif not 0 <= vm <= self.RANGE[1]:
             raise errors.RangeError(f"Value of M channel is {vm} but is not in range of 0 <= m <= 100")
-        elif not 0 <= vy <= 100:
+        elif not 0 <= vy <= self.RANGE[2]:
             raise errors.RangeError(f"Value of Y channel is {vy} but is not in range of 0 <= y <= 100")
-        elif not 0 <= vk <= 100:
+        elif not 0 <= vk <= self.RANGE[3]:
             raise errors.RangeError(f"Value of K channel is {vk} but is not in range of 0 <= k <= 100")
         self.c = vc
         self.m = vm
@@ -28,10 +29,10 @@ class cmyk(colour.Colour):
             yield i
 
     def rgb(self):
-        c = self.c/100
-        m = self.m/100
-        y = self.y/100
-        k = self.k/100
+        c = self.c/self.RANGE[0]
+        m = self.m/self.RANGE[1]
+        y = self.y/self.RANGE[2]
+        k = self.k/self.RANGE[3]
 
         r = 255 * (1-c) * (1-k)
         g = 255 * (1-m) * (1-k)

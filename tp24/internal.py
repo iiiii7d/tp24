@@ -17,3 +17,6 @@ def getclass(cls, cls2):
     modulename = type(cls).__name__ if not issubclass(type(cls), colour.ColourAlpha) else type(cls).__name__[:-1]
     module = importlib.import_module("tp24.colours_"+modulename)
     return getattr(module, classname)
+
+def unalpha(i, cls):
+    return i[:-1] if issubclass(type(cls), colour.ColourAlpha) else i

@@ -4,16 +4,17 @@ import tp24.colours_rgb as col_rgb
 import tp24.colours_hsv as col_hsv
 
 class hsl(colour.Colour):
+    RANGE = (360, 100, 100)
     h = None
     s = None
     l = None
 
     def __init__(self, vh: int, vs: int, vl: int):
-        if not 0 <= vh <= 360:
+        if not 0 <= vh <= self.RANGE[0]:
             raise errors.RangeError(f"Value of H channel is {vh} but is not in range of 0 <= h <= 360")
-        elif not 0 <= vs <= 100:
+        elif not 0 <= vs <= self.RANGE[1]:
             raise errors.RangeError(f"Value of S channel is {vs} but is not in range of 0 <= s <= 100")
-        elif not 0 <= vl <= 100:
+        elif not 0 <= vl <= self.RANGE[2]:
             raise errors.RangeError(f"Value of L channel is {vl} but is not in range of 0 <= l <= 100")
         self.h = vh
         self.s = vs
@@ -25,9 +26,9 @@ class hsl(colour.Colour):
             yield i
 
     def rgb(self):
-        h = self.h if self.h != 360 else 0
-        s = self.s/100
-        l = self.l/100
+        h = self.h if self.h != self.RANGE[0] else 0
+        s = self.s/self.RANGE[1]
+        l = self.l/self.RANGE[2]
         c = (1 - abs(2*l-1)) * s
         x = c * (1 - abs((h/60)%2 - 1))
         m = l - c/2
@@ -50,15 +51,15 @@ class hsl(colour.Colour):
 
     def hsv(self):
         h = self.h
-        s = self.s/100
-        l = self.l/100
+        s = self.s/self.RANGE[1]
+        l = self.l/self.RANGE[2]
 
         v = l + s*min(l, 1-l)
         if v == 0: s == 0
         else: s == 2-(2*l)/v
 
-        s = round(s*100)
-        v = round(v*100)
+        s = round(s*self.RANGE[1])
+        v = round(v*self.RANGE[2])
 
         if issubclass(type(self), colour.ColourAlpha):
             return col_hsv.hsva(h, s, v, self.a)

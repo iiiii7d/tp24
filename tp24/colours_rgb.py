@@ -5,16 +5,17 @@ import tp24.colours_hsl as col_hsl
 import tp24.errors as errors
 
 class rgb(colour.Colour):
+    RANGE = (255, 255, 255)
     r = None
     g = None
     b = None
 
     def __init__(self, vr: int, vg: int, vb: int):
-        if not 0 <= vr <= 255:
+        if not 0 <= vr <= self.RANGE[0]:
             raise errors.RangeError(f"Value of R channel is {vr} but is not in range of 0 <= r <= 255")
-        elif not 0 <= vg <= 255:
+        elif not 0 <= vg <= self.RANGE[1]:
             raise errors.RangeError(f"Value of G channel is {vg} but is not in range of 0 <= g <= 255")
-        elif not 0 <= vb <= 255:
+        elif not 0 <= vb <= self.RANGE[2]:
             raise errors.RangeError(f"Value of b channel is {vb} but is not in range of 0 <= b <= 255")
         self.r = vr
         self.g = vg
@@ -26,9 +27,9 @@ class rgb(colour.Colour):
             yield i
 
     def hsv(self):
-        r = self.r/255
-        g = self.g/255
-        b = self.b/255
+        r = self.r/self.RANGE[0]
+        g = self.g/self.RANGE[1]
+        b = self.b/self.RANGE[2]
         cmax = max(r, g, b)
         cmin = min(r, g, b)
         d = cmax-cmin
@@ -53,9 +54,9 @@ class rgb(colour.Colour):
             return col_hsv.hsv(h, s, v)
 
     def hsl(self):
-        r = self.r/255
-        g = self.g/255
-        b = self.b/255
+        r = self.r/self.RANGE[0]
+        g = self.g/self.RANGE[1]
+        b = self.b/self.RANGE[2]
         cmax = max(r, g, b)
         cmin = min(r, g, b)
         d = cmax-cmin
@@ -81,9 +82,9 @@ class rgb(colour.Colour):
 
 
     def cmyk(self):
-        r = self.r/255
-        g = self.g/255
-        b = self.b/255
+        r = self.r/self.RANGE[0]
+        g = self.g/self.RANGE[1]
+        b = self.b/self.RANGE[2]
         
         k = 1-max(r, g, b)
         c = (1-r-k)/(1-k)

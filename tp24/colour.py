@@ -7,14 +7,21 @@ import tp24.tools as tools
 
 class Colour:
     def __add__(self, other):
+        if internal.unalpha(type(self).__name__, self) != internal.unalpha(type(other).__name__, other):
+            funcname = internal.unalpha(type(self).__name__, self)
+            other = getattr(other, funcname)()
         sv, ov = internal.tuplify(self, other)
-        new = tuple(a+b if a+b<=255 else 255 for a, b in zip(sv, ov))
-        return internal.getclass(self, other)(*new)
+        new = tuple(a+b for a, b in zip(sv, ov))
+        oc = internal.getclass(self, other)
+        new = tuple(c if r>=len(oc.RANGE) or c<=oc.RANGE[r] else oc.RANGE[r] for r, c in enumerate(new)) 
+        return oc(*new)
 
     def __sub__(self, other):
         sv, ov = internal.tuplify(self, other)
-        new = tuple(a-b if a-b>=0 else 0 for a, b in zip(sv, ov))
-        return internal.getclass(self, other)(*new)
+        new = tuple(a-b for a, b in zip(sv, ov))
+        oc = internal.getclass(self, other)
+        new = tuple(c if r>=len(oc.RANGE) or c<=oc.RANGE[r] else oc.RANGE[r] for r, c in enumerate(new)) 
+        return oc(*new)
 
     def __mul__(self, other):
         return tools.gradient(self, other)
@@ -25,11 +32,13 @@ class Colour:
         return model+vals
         
     def hexv(self, compress=False):
-        if type(self).__name__ != "rgb":
-            pass
+        if not type(self).__name__.startswith("rgb"):
+            c = self.rgb()
+        else:
+            c = self
 
         r = "#"
-        for i in tuple(self):
+        for i in tuple(c):
             n = hex(i).split('x')[1]
             if len(n) == 1: n = "0"+n
             r += n
@@ -74,21 +83,17 @@ class Colour:
             colour_rgb = col_rgb.rgb(*channels)
         
         if not cls.__name__.startswith("rgb"):
-            classname = cls.__name__[:-1] if issubclass(cls, ColourAlpha) else cls.__name__
+            classname = internal.unalpha(cls.__name__, cls)
             return getattr(colour_rgb, classname)()
         else:
             return colour_rgb
 
-    def invert(self):
-        if type(self).__name__.startswith("rgb"): m = (255, 255, 255)
-        elif type(self).__name__.startswith("hs"): m = (360, 100, 100)
-        elif type(self).__name__.startswith("cmyk"): m = (100, 100, 100, 100)
-        # dont worry will unhardcopy this
-        old = tuple(self)[:-1] if issubclass(type(self), ColourAlpha) else tuple(self)
-        new = tuple(a-b for a, b in zip(m, old))
+    def inverted(self):
+        old = internal.unalpha(tuple(self), self)
+        new = tuple(a-b for a, b in zip(self.RANGE, old))
+        if issubclass(type(self), ColourAlpha): new = tuple(list(new)+[self.a])
 
-        for n, a in enumerate(type(self).__name__):
-            setattr(self, a, new[n])
+        return type(self)(*new)
             
 
     def add_alpha(self, va: int):
