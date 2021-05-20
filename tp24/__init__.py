@@ -4,4 +4,4 @@ from tp24.model.m_hsl import *
 from tp24.model.m_hsv import *
 from tp24.model.m_cmyk import *
 
-__version__ = "0.0"
+__version__ = "1.0"

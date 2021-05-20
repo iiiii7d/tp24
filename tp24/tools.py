@@ -1,7 +1,8 @@
 import tp24.internal as internal
 import tp24.model.colour as colour
+from typing import Union
 
-def gradient(a: colour.Colour, b: colour.Colour, ap=0.5, bp=0.5):
+def gradient(a: colour.Colour, b: colour.Colour, ap: Union[int, float]=0.5, bp: Union[int, float]=0.5):
     b = internal.samemodel(a, b)
     av, bv = internal.tuplify(a, b)
     new = tuple(round((p*ap+q*bp)/(ap+bp)) for p, q in zip(av, bv))
@@ -13,7 +14,7 @@ def similarity(a: colour.Colour, b: colour.Colour):
     bt = internal.unalpha(tuple(b), b)
     ait = internal.unalpha(tuple(a.complementary()), a)
 
-    if at == bt: return 100.0
+    if at == bt: return 1.0
     elif ait == bt: return 0.0
 
     scores = []

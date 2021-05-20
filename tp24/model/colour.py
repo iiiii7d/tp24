@@ -19,7 +19,7 @@ class Colour:
         sv, ov = internal.tuplify(self, other)
         new = tuple(a-b for a, b in zip(sv, ov))
         oc = internal.getclass(self, other)
-        new = tuple(c if r>=len(oc.RANGE) or c<=oc.RANGE[r] else oc.RANGE[r] for r, c in enumerate(new)) 
+        new = tuple(c if r>=len(oc.RANGE) or c>=0 else 0 for r, c in enumerate(new)) 
         return oc(*new)
 
     def __mul__(self, other):
@@ -30,7 +30,7 @@ class Colour:
         vals = str(tuple(self))
         return model+vals
         
-    def hexv(self, compress=False):
+    def hexv(self, compress: bool=False):
         if not type(self).__name__.startswith("rgb"):
             c = self.rgb()
         else:
@@ -97,27 +97,18 @@ class Colour:
             return colour_rgb
 
     def inverted(self):
-        if internal.unalpha(type(self).__name__, self) != "rgb":
-            c = self.rgb()
-        else:
-            c = self
-        
-        old = internal.unalpha(tuple(c), c)
-        new = tuple(a-b for a, b in zip(c.RANGE, old))
-        if issubclass(type(c), ColourAlpha): new = tuple(list(new)+[c.a])
+        old = internal.unalpha(tuple(self), self)
+        new = tuple(a-b for a, b in zip(self.RANGE, old))
+        if issubclass(type(self), ColourAlpha): new = tuple(list(new)+[self.a])
 
-        if internal.unalpha(type(self).__name__, self) != "rgb":
-            import tp24.model.m_rgb as col_rgb
-            return getattr(getattr(col_rgb, internal.unalpha(type(c).__name__, c))(*new), internal.unalpha(type(self).__name__, self))()
-        else:
-            return type(self)(*new)
+        return type(self)(*new)
 
     def wheel(self, colours: int, degree: int=None):
         if degree == None:
             degree = 360/(colours+1)
         if degree < 0 or degree > 180:
             raise errors.RangeError(f"Value of degree is {degree} but is not in range of 0 <= d <= 180")
-        elif colours < 0:
+        elif colours <= 0:
             raise errors.RangeError(f"Number of colours is {colours} but is not in range of c > 0")
 
         if internal.unalpha(type(self).__name__, self) != "hsl":
@@ -157,10 +148,10 @@ class Colour:
     def tetradic(self):
         return self.wheel(3)
 
-    def analogous(self, degree=30):
-        return self.wheel(degree)
+    def analogous(self, degree: int=30):
+        return self.wheel(2, degree)
 
-    def compound(self, degree=30):
+    def compound(self, degree: int=30):
         return self.complementary().analogous(degree)
 
     def add_alpha(self, va: int):
