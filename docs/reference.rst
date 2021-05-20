@@ -1,6 +1,6 @@
 Reference
 =========
-.. py:module:: tp24
+.. py:currentmodule:: tp24
 
 Models
 ------
@@ -13,7 +13,7 @@ Models
 
    .. warning::
       Do not use Colour itself to specify a colour.
-      Use classes inherited from ``Colour``, eg ``tp24.rgb``, ``tp24.cmyk``, etc.
+      Use classes inherited from :py:class:`Colour`, eg :py:class:`rgb`, :py:class:`cmyk`, etc.
 
    .. description:: Operations
 
@@ -46,7 +46,7 @@ Models
 
       :param str hexc: The hex code
       :return: A colour
-      :rtype: :py:class:`Colour`
+      :rtype: Colour
       :raises ValueError: if the hex code is invalid
 
    .. py:classmethod:: from_web(web: str)
@@ -61,7 +61,7 @@ Models
 
       :param str web: The name of the colour
       :return: A colour
-      :rtype: :py:class:`Colour`
+      :rtype: Colour
       :raises ValueError: if the name is invalid
 
    .. py:method:: inverted()
@@ -73,38 +73,44 @@ Models
       .. versionadded:: 1.0
 
       :return: The inverted colour.
-      :rtype: :py:class:`Colour`
+      :rtype: Colour
 
    .. py:method:: wheel(colours: int, degree: int=None)
 
       Gets colours on the colour wheel.
 
-      .. versionadded: 1.0
+      .. versionadded:: 1.0
 
       :param str colours: The number of colours to get from the wheel.
       :param int or None degree: The interval between colours in degrees.
       :return: The colours
-      :rtype: tuple[:py:class:`Colour`]
+      :rtype: tuple[Colour]
       :raises RangeError: if ``degree`` < 0 or ``degree`` > 180
       :raises RangeError: if ``colour`` ≤ 0
 
    .. py:method:: complementary()
 
       Gets the complementary colour.
+
+      .. versionadded:: 1.0
       
       Alias of ``wheel(1)[0]``, and
 
-      :rtype: :py:class:`Colour`
+      :rtype: Colour
 
    .. py:method:: triadic()
 
       Gets the two other colours in the traidic set of colours.
+
+      .. versionadded:: 1.0
    
       Alias of ``wheel(2)``
 
    .. py:method:: tetradic()
 
       Gets the three other colours in the tetradic set of colours.
+
+      .. versionadded:: 1.0
    
       Alias of ``wheel(3)``
 
@@ -112,11 +118,15 @@ Models
 
       Gets the two anaologous colours.
 
+      .. versionadded:: 1.0
+
       Alias of ``wheel(2, degree)``
 
    .. py:method:: compound(degree: int=30)
 
       Gets the two compound colours (analogous colours of the complementary colour).
+
+      .. versionadded:: 1.0
 
       Alias of ``complementary().analogous(degree)``
 
@@ -126,9 +136,11 @@ Models
 
       The original colour is unchanged.
 
+      .. versionadded:: 1.0
+
       :param int va: the value for the alpha channel
       :return: The colour with an alpha channel.
-      :rtype: :py:class:`Colour` & :py:class:`ColourAlpha`
+      :rtype: Colour
 
 .. py:class:: ColourAlpha
 
@@ -139,11 +151,13 @@ Models
    .. warning::
       Do not use ColourAlpha itself to specify a colour.
       In fact this class is not inherited from :py:class:`Colour`
-      Use classes inherited from ``Colour``, eg ``tp24.rgba``, ``tp24.cmyka``, etc.
+      Use classes inherited from :py:class:`Colour`, eg :py:class:`rgba`, :py:class:`cmyka`, etc.
 
    .. method:: __init__(va: int)
 
       Instantiating a colour with an alpha channel requires an additional parameter after all the other parameters.
+
+      .. versionadded:: 1.0
 
       :param int va: the value for the alpha channel
       :raises RangeError: if ``alpha`` < 0 or ``alpha`` > 100
@@ -154,8 +168,10 @@ Models
 
       The original colour is unchanged.
 
+      .. versionadded:: 1.0
+
       :return: The colour without an alpha channel.
-      :rtype: :py:class:`Colour`
+      :rtype: Colour
 
 .. py:class:: rgb(Colour)
               cmyk(Colour)
@@ -168,6 +184,8 @@ Models
    .. method:: __init__(...)
 
       Instantiating a colour requires the values of each channel of the colour.
+
+      .. versionadded:: 1.0
 
       **RGB**
 
@@ -201,13 +219,17 @@ Models
 
       Each class does not have the converting method of the same name, eg there is no ``rgb.rgb()`` but a ``cmyk.rgb()``
 
+      .. versionadded:: 1.0
+
       :return: The colour in the new model.
-      :rtype: :py:class:`Colour`
+      :rtype: Colour
 
    .. py:property:: RANGE
    :type: tuple[int]
       
       The maximum value of each of the channels.
+
+      .. versionadded:: 1.0
 
    .. py:attribute:: r
                      g
@@ -224,6 +246,8 @@ Models
 
       The value of a specific channel.
 
+      .. versionadded:: 1.0
+
 .. py:class:: rgba(Colour, ColourAlpha)
               cmyka(Colour, ColourAlpha)
               cmya(Colour, ColourAlpha)
@@ -237,13 +261,17 @@ Models
       Calls both __init__ functions from Colour and ColourAlpha.
 
       The last parameter is used as the alpha, while the other parameters define the values of the other channels.
+      
+      .. versionadded:: 1.0
 
    .. py:attribute:: a
    :type: int
 
       The value of the alpha channel.
 
-.. py:module:: tp24.tools
+      .. versionadded:: 1.0
+
+.. py:currentmodule:: tp24.tools
 
 Tools
 -----
@@ -252,25 +280,29 @@ Tools
 
    Get a colour along a gradient between two colours. Works best in RGB.
 
+   .. versionadded:: 1.0
+
    :param Colour a: The first colour
    :param Colour b: The second colour
    :param ap: The proportion of the first colour to mix
    :param bp: The proportion of the second colour to mix
    :type ap: int or float
    :type bp: int or float
-   :return: the colour
-   :rtype: :py:class:`Colour`
+   :return: The colour
+   :rtype: Colour
    
 .. py:function:: similarity(a: Colour, b: Colour)
 
    Finds the similarity of two colours by comparing the values of each channel. Works best in HSL/V.
 
+   .. versionadded:: 1.0
+
    :param Colour a: The first colour
    :param Colour b: The second colour
-   :return: the colour
-   :rtype: :py:class:`Colour`
+   :return: The colour
+   :rtype: Colour
 
-.. py:module:: tp24.errors
+.. py:currentmodule:: tp24.errors
 
 Errors
 ------
@@ -278,3 +310,5 @@ Errors
 .. py:exception:: RangeError
 
    Raised when the value provided is outside the range allowed.
+
+   .. versionadded:: 1.0

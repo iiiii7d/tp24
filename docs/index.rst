@@ -1,7 +1,7 @@
-Welcome to tp24's documentation!
-================================
+tp24 v1.0
+=========
 
-Python colour library
+Python colour library, made by 7d
 
 - supports RGB, CMY, CMYK, HSV, HSL models & transparency
 - add & subtract colours to lighten & darken
