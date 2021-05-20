@@ -56,7 +56,7 @@ class Colour:
 
     @classmethod
     def from_web(cls, web: str):
-        with open("tp24/web.json", "r") as f:
+        with open("tp24/model/web.json", "r") as f:
             data = json.load(f)
             f.close()
         if not web in data.keys():
@@ -79,7 +79,7 @@ class Colour:
         channels = tuple(c[i:i+2] for i in range(0, len(c), 2))
         channels = tuple(int('0x'+i, 16) for i in channels)
 
-        import tp24.colours_rgb as col_rgb
+        import tp24.model.m_rgb as col_rgb
 
         if issubclass(cls, ColourAlpha):
             channels = list(channels)
@@ -107,7 +107,7 @@ class Colour:
         if issubclass(type(c), ColourAlpha): new = tuple(list(new)+[c.a])
 
         if internal.unalpha(type(self).__name__, self) != "rgb":
-            import tp24.colours_rgb as col_rgb
+            import tp24.model.m_rgb as col_rgb
             return getattr(getattr(col_rgb, internal.unalpha(type(c).__name__, c))(*new), internal.unalpha(type(self).__name__, self))()
         else:
             return type(self)(*new)
@@ -125,7 +125,7 @@ class Colour:
         else:
             c = self
 
-        import tp24.colours_hsl as col_hsl
+        import tp24.model.m_hsl as col_hsl
         cols = []
         for i in range(colours):
             if issubclass(type(c), ColourAlpha):
@@ -168,7 +168,7 @@ class Colour:
             return self
         classname = type(self).__name__+'a'
         modulename = type(self).__name__
-        module = importlib.import_module("tp24.colours_"+modulename)
+        module = importlib.import_module("tp24.model.m_"+modulename)
         vals = tuple(list(self)+[va])
         return getattr(module, classname)(*vals)
     
@@ -181,6 +181,6 @@ class ColourAlpha:
     def remove_alpha(self):
         classname = type(self).__name__[:-1]
         modulename = type(self).__name__[:-1]
-        module = importlib.import_module("tp24.colours_"+modulename)
+        module = importlib.import_module("tp24.model.m_"+modulename)
         vals = tuple(list(self)[:-1])
         return getattr(module, classname)(*vals)

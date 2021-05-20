@@ -1,5 +1,5 @@
 import importlib
-import tp24.colour as colour
+import tp24.model.colour as colour
 
 def tuplify(s, o):
     if type(s).__name__ != type(o).__name__:
@@ -15,7 +15,7 @@ def getclass(cls, cls2):
     if (issubclass(type(cls), colour.ColourAlpha) or issubclass(type(cls2), colour.ColourAlpha)) and not classname.endswith("a"):
         classname += 'a'
     modulename = type(cls).__name__ if not issubclass(type(cls), colour.ColourAlpha) else type(cls).__name__[:-1]
-    module = importlib.import_module("tp24.colours_"+modulename)
+    module = importlib.import_module("tp24.model.m_"+modulename)
     return getattr(module, classname)
 
 def unalpha(i, cls):

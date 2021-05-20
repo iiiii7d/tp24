@@ -1,5 +1,5 @@
 import tp24.internal as internal
-import tp24.colour as colour
+import tp24.model.colour as colour
 
 def gradient(a: colour.Colour, b: colour.Colour, ap=0.5, bp=0.5):
     b = internal.samemodel(a, b)

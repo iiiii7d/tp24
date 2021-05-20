@@ -1,7 +1,8 @@
-import tp24.colour as colour
-import tp24.colours_cmyk as col_cmyk
-import tp24.colours_hsv as col_hsv
-import tp24.colours_hsl as col_hsl
+import tp24.model.colour as colour
+import tp24.model.m_cmyk as col_cmyk
+import tp24.model.m_cmy as col_cmy
+import tp24.model.m_hsv as col_hsv
+import tp24.model.m_hsl as col_hsl
 import tp24.errors as errors
 
 class rgb(colour.Colour):
@@ -100,6 +101,17 @@ class rgb(colour.Colour):
             return col_cmyk.cmyka(c, m, y, k, self.a)
         else:
             return col_cmyk.cmyk(c, m, y, k)
+
+    def cmy(self):
+        c = 255 - self.r
+        m = 255 - self.g
+        y = 255 - self.b
+
+        if issubclass(type(self), colour.ColourAlpha):
+            return col_cmy.cmya(c, m, y, self.a)
+        else:
+            return col_cmy.cmy(c, m, y)
+
 
 class rgba(rgb, colour.ColourAlpha):
     def __init__(self, *v):
