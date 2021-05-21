@@ -2,6 +2,11 @@ Reference
 =========
 .. py:currentmodule:: tp24
 
+.. py:property:: __version__
+   :type: str
+      
+      The version of tp24.
+
 Models
 ------
 
