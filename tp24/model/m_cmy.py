@@ -32,10 +32,18 @@ class cmy(colour.Colour):
         return self.rgb().hsl()
 
     def cmyk(self):
-        k = min(self.c, self.m, self.y)
-        c = self.c*k
-        m = self.m*k
-        y = self.y-k
+        c = self.c/255
+        m = self.m/255
+        y = self.y/255
+
+        k = min(c, m, y)
+        c *= k
+        m *= k
+        y -= k
+
+        c *= 100
+        m *= 100
+        y *= 100
 
         if issubclass(type(self), colour.ColourAlpha):
             return col_cmyk.cmyka(c, m, y, k, self.a)

@@ -62,7 +62,11 @@ class cmyk(colour.Colour):
         else:
             c = self.c/self.k
             m = self.m/self.k
-            y = self.y+self.k        
+            y = self.y+self.k
+
+        c *= 100/255
+        m *= 100/255
+        y *= 100/255
 
         if issubclass(type(self), colour.ColourAlpha):
             return col_cmy.cmya(c, m, y, self.a)

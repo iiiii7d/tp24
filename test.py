@@ -7,11 +7,11 @@ print(time.time()-s)
 
 def test_pytest():
     # inits
-    col_rgba = tp24.rgba(255, 0, 0, 100)
-    col_cmya = tp24.cmya(255, 0, 0, 100)
-    col_hsva = tp24.hsva(100, 0, 0, 100)
-    col_hsla = tp24.hsla(100, 0, 0, 100)
-    col_cmyka = tp24.cmyka(100, 0, 0, 0, 100)
+    col_rgba = tp24.rgba(255, 128, 204, 100)
+    col_cmya = tp24.cmya(255, 128, 204, 100)
+    col_hsva = tp24.hsva(100, 50, 36, 100)
+    col_hsla = tp24.hsla(340, 42, 53, 100)
+    col_cmyka = tp24.cmyka(100, 86, 26, 0, 100)
 
     col_hex = tp24.rgb.from_hex("#f00")
     col_web = tp24.rgb.from_web("red")
@@ -46,7 +46,8 @@ def test_pytest():
     print(col_rgba + col_cmya)
     print(col_rgba - col_cmya)
     print(col_rgba * col_cmya)
-    print(tp24.tools.similarity(col_rgba, col_cmya))
+    print(tp24.tools.similarity(col_hsva, col_hsla))
+    print(tp24.tools.similarity(col_rgba, col_cmyka))
 
     # schemes
     col_rgba.analogous()
