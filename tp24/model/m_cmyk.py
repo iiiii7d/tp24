@@ -55,9 +55,14 @@ class cmyk(colour.Colour):
         return self.rgb().hsv()
 
     def cmy(self):
-        c = self.c/self.k
-        m = self.m/self.k
-        y = self.y+self.k
+        if self.k == 0:
+            c = self.c
+            m = self.m
+            y = self.y
+        else:
+            c = self.c/self.k
+            m = self.m/self.k
+            y = self.y+self.k        
 
         if issubclass(type(self), colour.ColourAlpha):
             return col_cmy.cmya(c, m, y, self.a)

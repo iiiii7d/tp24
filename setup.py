@@ -36,3 +36,8 @@ setup(
     'Topic :: Utilities'
   ],
 )
+
+#commands for upload in case i forget
+#python setup.py sdist
+#python setup.py bdist_wheel
+#twine upload dist/*

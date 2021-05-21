@@ -88,9 +88,15 @@ class rgb(colour.Colour):
         b = self.b/self.RANGE[2]
         
         k = 1-max(r, g, b)
-        c = (1-r-k)/(1-k)
-        m = (1-g-k)/(1-k)
-        y = (1-b-k)/(1-k)
+
+        if k==1:
+            c = 0
+            m = 0
+            y = 0
+        else:
+            c = (1-r-k)/(1-k)
+            m = (1-g-k)/(1-k)
+            y = (1-b-k)/(1-k)
 
         c = round(c*100)
         m = round(m*100)

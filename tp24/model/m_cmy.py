@@ -10,11 +10,11 @@ class cmy(colour.Colour):
     y = None
 
     def __init__(self, vc: int, vm: int, vy: int):
-        if not 0 <= vc <= self.cANGE[0]:
+        if not 0 <= vc <= self.RANGE[0]:
             raise errors.RangeError(f"Value of C channel is {vc} but is not in range of 0 <= c <= 255")
-        elif not 0 <= vm <= self.cANGE[1]:
+        elif not 0 <= vm <= self.RANGE[1]:
             raise errors.RangeError(f"Value of M channel is {vm} but is not in range of 0 <= m <= 255")
-        elif not 0 <= vy <= self.cANGE[2]:
+        elif not 0 <= vy <= self.RANGE[2]:
             raise errors.RangeError(f"Value of Y channel is {vy} but is not in range of 0 <= y <= 255")
         self.c = vc
         self.m = vm
@@ -38,9 +38,9 @@ class cmy(colour.Colour):
         y = self.y-k
 
         if issubclass(type(self), colour.ColourAlpha):
-            return col_cmyk.cmyka(c, m, y, self.a)
+            return col_cmyk.cmyka(c, m, y, k, self.a)
         else:
-            return col_cmyk.cmyk(c, m, y)
+            return col_cmyk.cmyk(c, m, y, k)
 
     def rgb(self):
         r = 255 - self.c

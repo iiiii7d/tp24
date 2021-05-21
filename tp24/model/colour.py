@@ -12,6 +12,10 @@ class Colour:
         new = tuple(a+b for a, b in zip(sv, ov))
         oc = internal.getclass(self, other)
         new = tuple(c if r>=len(oc.RANGE) or c<=oc.RANGE[r] else oc.RANGE[r] for r, c in enumerate(new)) 
+        if issubclass(type(self), ColourAlpha):
+            new = list(new)
+            new[-1] = 100 if new[-1] > 100 else 0 if new[-1] < 0 else new[-1]
+            new = tuple(new)
         return oc(*new)
 
     def __sub__(self, other):
@@ -20,6 +24,10 @@ class Colour:
         new = tuple(a-b for a, b in zip(sv, ov))
         oc = internal.getclass(self, other)
         new = tuple(c if r>=len(oc.RANGE) or c>=0 else 0 for r, c in enumerate(new)) 
+        if issubclass(type(self), ColourAlpha):
+            new = list(new)
+            new[-1] = 100 if new[-1] > 100 else 0 if new[-1] < 0 else new[-1]
+            new = tuple(new)
         return oc(*new)
 
     def __mul__(self, other):

@@ -1,7 +1,19 @@
 # tp24
 
 [![Build Status](https://travis-ci.com/iiiii7d/tp24.svg?branch=main)](https://travis-ci.com/iiiii7d/tp24)
+[![Documentation Status](https://readthedocs.org/projects/tp24/badge/?version=latest)](https://tp24.readthedocs.io/en/latest/?badge=latest)
+![PyPI Version](https://img.shields.io/pypi/v/tp24)
+![Github Version](https://img.shields.io/github/v/release/iiiii7d/tp24)
+![Python Versions](https://img.shields.io/pypi/pyversions/tp24)
+![License](https://img.shields.io/github/license/iiiii7d/tp24)
 
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/iiiii7d/tp24)
+![GitHub repo size](https://img.shields.io/github/repo-size/iiiii7d/tp24)
+![GitHub last commit](https://img.shields.io/github/last-commit/iiiii7d/tp24)
+![GitHub Release Date](https://img.shields.io/github/release-date/iiiii7d/tp24)
+![Lines of code](https://img.shields.io/tokei/lines/github/iiiii7d/tp24)
+[![codecov](https://codecov.io/gh/iiiii7d/tp24/branch/main/graph/badge.svg?token=1BFTIC2SFA)](https://codecov.io/gh/iiiii7d/tp24)
+[![CodeFactor](https://www.codefactor.io/repository/github/iiiii7d/tp24/badge/main)](https://www.codefactor.io/repository/github/iiiii7d/tp24/overview/main)
 
 Python colour library, made by 7d
 - supports RGB, CMY, CMYK, HSV, HSL models & transparency
