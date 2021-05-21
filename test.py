@@ -42,6 +42,8 @@ def test_pytest():
     col_cmyka.hsv()
     col_cmyka.hsl()
 
+    col_rgba.hexv()
+
     # tools
     print(col_rgba + col_cmya)
     print(col_rgba - col_cmya)
