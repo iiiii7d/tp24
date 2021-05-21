@@ -1,4 +1,8 @@
 # tp24
+
+[![Build Status](https://travis-ci.com/iiiii7d/tp24.svg?branch=main)](https://travis-ci.com/iiiii7d/tp24)
+
+
 Python colour library, made by 7d
 - supports RGB, CMY, CMYK, HSV, HSL models & transparency
 - add & subtract colours to lighten & darken
